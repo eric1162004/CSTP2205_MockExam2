@@ -91,6 +91,11 @@ dependencies {
     // Coil for Loading Image
     implementation("io.coil-kt:coil-compose:1.4.0")
 
+    // Camera
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation 'androidx.camera:camera-view:1.0.0-alpha28'
+
     // Calendar
     implementation("com.github.sigmadeltasoftware:CalPose:v1.1.0")
 

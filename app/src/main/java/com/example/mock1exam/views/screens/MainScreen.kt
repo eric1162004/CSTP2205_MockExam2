@@ -14,56 +14,38 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 fun MainScreen() {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = Screen.LoginScreen.route) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.SearchFriendListScreen.route
+    ) {
+
+        composable(route = Screen.WelcomeScreen.route) {
+            WelcomeScreen(navController)
+        }
+
         composable(route = Screen.LoginScreen.route) {
-            LoginScreen(
-                onCreateAccountButtonPressed = {
-                    navController.navigate(Screen.SignUpScreen.route)
-                },
-                onLoginButtonPressed = {
-                    // On login button pressed
-                    // TODO: set up authentication logic
-                    navController.navigate(Screen.BananaSubmitScreen.route)
-                }
-            )
+            LoginScreen(navController)
         }
 
         composable(route = Screen.SignUpScreen.route) {
-            SignUpScreen(
-                onBackButtonPressed = {
-                    navController.navigate(Screen.LoginScreen.route)
-                },
-                onSignUpButtonPressed = {
-                    // TODO: set up sign up logic
-                    navController.navigate(Screen.BananaSubmitScreen.route)
-                }
-            )
+            SignUpScreen(navController)
         }
 
-        composable(route = Screen.BananaSubmitScreen.route) {
-            BananaSubmitScreen(
-                nagivateToBananaListing = {
-                    navController.navigate(Screen.BananaListingScreen.route)
-                }
-            )
+        composable(route = Screen.SearchFriendListScreen.route) {
+            SearchFriendListScreen(navController)
         }
 
-        composable(route = Screen.BananaListingScreen.route) {
-            BananaListingScreen {
-                navController.navigate(Screen.BananaDetailsScreen.route)
-            }
+        composable(route = Screen.MoreFriendsScreen.route) {
+            MoreFriendsScreen(navController)
         }
 
-        composable(route = Screen.BananaDetailsScreen.route) {
-            BananaDetailsScreen(
-                nagivateToBananaMapScreen = {
-                    navController.navigate(Screen.BananaMapScreen.route)
-                }
-            )
+        composable(route = Screen.CatDetailsScreen.route) {
+            CatDetailsScreen(navController)
         }
 
-        composable(route = Screen.BananaMapScreen.route) {
-            BananaMapScreen()
+        composable(route = Screen.CatUploadScreen.route) {
+            CatUploadScreen(navController)
         }
+
     }
 }

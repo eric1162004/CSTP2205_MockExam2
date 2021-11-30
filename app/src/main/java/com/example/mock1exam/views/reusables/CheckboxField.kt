@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.mock1exam.ui.theme.Dm
@@ -19,7 +20,8 @@ import com.example.mock1exam.ui.theme.Dm
 fun CheckboxField(
     checked: Boolean,
     label: String,
-    labelTextColor: Color = Color.Black,
+    labelTextColor: Color = MaterialTheme.colors.primary,
+    labelFontStyle: TextStyle = MaterialTheme.typography.body1,
     spacer: Dp = Dm.marginSmall,
     modifier: Modifier = Modifier,
     onCheckedChange: (checked: Boolean) -> Unit
@@ -52,7 +54,7 @@ fun CheckboxField(
 
         Text(
             text = label,
-            style = MaterialTheme.typography.body1,
+            style = labelFontStyle,
             color = labelTextColor
         )
     }

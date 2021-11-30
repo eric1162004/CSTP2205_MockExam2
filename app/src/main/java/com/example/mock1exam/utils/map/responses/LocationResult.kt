@@ -6,3 +6,4 @@ data class LocationResult(
     val query: List<String>,
     val type: String
 )
+

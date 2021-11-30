@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,8 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
@@ -23,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mock1exam.ui.theme.Dm
 
 @Composable
-fun CustomTextField(
+fun CustomTextFieldWithImageIcon(
     backgroundColor: Color = Color.White,
     borderWidth: Dp = Dm.borderWidth,
     fontSize: TextUnit = MaterialTheme.typography.body1.fontSize,
@@ -31,9 +28,7 @@ fun CustomTextField(
     iconSize: Dp = 35.dp,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    imageVector: ImageVector? = null,
-    imageVectorTint: Color = Color.LightGray,
-    textFieldBorderRadius: Shape = MaterialTheme.shapes.small,
+    imageResourceId: Int? = null,
     maxLines: Int = 1,
     modifier: Modifier = Modifier,
     padding: Dp = Dm.marginSmall,
@@ -45,26 +40,26 @@ fun CustomTextField(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clip(MaterialTheme.shapes.small)
             .background(backgroundColor)
             .border(
                 width = borderWidth,
                 color = MaterialTheme.colors.primary,
-                shape = textFieldBorderRadius
+                shape = MaterialTheme.shapes.small
             )
             .padding(padding),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
         // leading icon
-        imageVector?.let {
-            Icon(
-                imageVector = it,
-                contentDescription = null,
-                tint = imageVectorTint,
+        imageResourceId?.let {
+            CircularImageButton(
+                imageResource = imageResourceId,
                 modifier = Modifier
                     .size(iconSize)
-                    .weight(1f)
-            )
+                    .weight(1f),
+                backgroundColor = Color.White
+            ) {}
 
             Spacer(
                 modifier = Modifier
@@ -102,4 +97,3 @@ fun CustomTextField(
         )
     }
 }
-

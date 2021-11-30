@@ -10,16 +10,19 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.mock1exam.R
 import com.example.mock1exam.ui.theme.Dm
+import com.example.mock1exam.views.navigation.Screen
 import com.example.mock1exam.views.reusables.*
 
 @Composable
 fun SignUpScreen(
-    onBackButtonPressed: () -> Unit,
-    onSignUpButtonPressed: () -> Unit
+    navController: NavController
 ) {
     Scaffold(
         topBar = {
@@ -30,143 +33,99 @@ fun SignUpScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = "login", style = MaterialTheme.typography.h1)
+                        Text(
+                            text = "SIGN",
+                            style = MaterialTheme.typography.body1,
+                            fontSize = 40.sp,
+                            color = MaterialTheme.colors.primary
+                        )
+                        Text(
+                            text = "UP",
+                            style = MaterialTheme.typography.h1,
+                            color = MaterialTheme.colors.secondary
+                        )
                     }
                 },
-                contentPadding = PaddingValues(vertical = Dm.marginSmall),
-                elevation = 0.dp
+                contentPadding = PaddingValues(vertical = Dm.marginExtraLarge),
+                elevation = 0.dp,
+                backgroundColor = Color.White
             )
         },
-        backgroundColor = MaterialTheme.colors.primary
+        backgroundColor = Color.White
     ) {
-        SignUpScreenContent(
-            onBackButtonPressed,
-            onSignUpButtonPressed
-        )
+        SignUpScreenContent(navController)
     }
 }
 
 @Composable
 private fun SignUpScreenContent(
-    onBackButtonPressed: () -> Unit,
-    onSignUpButtonPressed: () -> Unit
-) {
-    Box(
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = Dm.marginMedium)
-        ) {
-            AppBananaCard(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SignUpForm(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Dm.marginMedium)
-                )
-            }
-
-            AppBananaCard(
-                defaultStyle = false,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = 430.dp)
-            ) {
-                // bottom section
-                Spacer(modifier = Modifier.height(Dm.marginExtraLarge))
-            }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dm.marginMedium)
-                .padding(Dm.marginMedium)
-                .padding(Dm.marginSmall)
-                .offset(y = (-200).dp)
-        ) {
-            CircularIconButton(
-                imageVector = Icons.Filled.ArrowBack,
-                modifier = Modifier.offset(y = 70.dp)
-            ) {
-                onBackButtonPressed()
-            }
-
-            CircularIconButton(
-                imageVector = Icons.Filled.ArrowForward,
-                modifier = Modifier
-            ) {
-                onSignUpButtonPressed()
-            }
-        }
-    }
-}
-
-@Composable
-private fun SignUpForm(
-    modifier: Modifier = Modifier
+    navController: NavController
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
-    Box(
-        contentAlignment = Alignment.BottomEnd
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = Dm.marginLarge * 2)
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.End,
-            modifier = modifier
+        // name
+        CustomTextFieldWithImageIcon(
+            imageResourceId = R.drawable.cat_pink_paw_icon,
+            padding = Dm.marginTiny,
+            placerHolderTextColor = MaterialTheme.colors.secondary,
+            placeHolderText = "name",
+            value = name
+        ) { name = it }
+
+        Spacer(modifier = Modifier.height(Dm.marginLarge))
+
+        // email
+        CustomTextFieldWithImageIcon(
+            imageResourceId = R.drawable.cat_pink_paw_icon,
+            padding = Dm.marginTiny,
+            placerHolderTextColor = MaterialTheme.colors.secondary,
+            placeHolderText = "email",
+            value = email
+        ) { email = it }
+
+        Spacer(modifier = Modifier.height(Dm.marginLarge))
+
+        // password
+        CustomTextFieldWithImageIcon(
+            imageResourceId = R.drawable.cat_pink_paw_icon,
+            padding = Dm.marginTiny,
+            placerHolderTextColor = MaterialTheme.colors.secondary,
+            placeHolderText = "password",
+            visualTransformation = PasswordVisualTransformation(),
+            value = password
+        ) { password = it }
+
+        Spacer(modifier = Modifier.height(Dm.marginLarge))
+
+        // password
+        CustomTextFieldWithImageIcon(
+            imageResourceId = R.drawable.cat_pink_paw_icon,
+            padding = Dm.marginTiny,
+            placerHolderTextColor = MaterialTheme.colors.secondary,
+            placeHolderText = "confirm password",
+            visualTransformation = PasswordVisualTransformation(),
+            value = confirmPassword
+        ) { confirmPassword = it }
+
+        Spacer(modifier = Modifier.height(Dm.marginLarge))
+
+        // sign up button
+        AppButton(
+            label = "sign up",
+            fontColor = Color.White,
+            buttonColor = MaterialTheme.colors.secondary,
+            modifier = Modifier.width(Dm.buttonWidthDefault)
         ) {
-//            Spacer(modifier = Modifier.height(Dm.marginLarge))
-
-            // name
-            CustomTextField(
-                imageVector = Icons.Filled.Person,
-                padding = Dm.marginTiny,
-                placeHolderText = "name",
-                value = name
-            ) { name = it }
-
-            Spacer(modifier = Modifier.height(Dm.marginLarge))
-
-            // email
-            CustomTextField(
-                imageVector = Icons.Filled.Email,
-                padding = Dm.marginTiny,
-                placeHolderText = "email",
-                value = email
-            ) { email = it }
-
-            Spacer(modifier = Modifier.height(Dm.marginLarge))
-
-            // password
-            CustomTextField(
-                imageVector = Icons.Filled.Lock,
-                padding = Dm.marginTiny,
-                placeHolderText = "password",
-                visualTransformation = PasswordVisualTransformation(),
-                value = password
-            ) { password = it }
-
-            Spacer(modifier = Modifier.height(Dm.marginLarge))
-
-            // password
-            CustomTextField(
-                imageVector = Icons.Filled.Lock,
-                padding = Dm.marginTiny,
-                placeHolderText = "confirm password",
-                visualTransformation = PasswordVisualTransformation(),
-                value = confirmPassword
-            ) { confirmPassword = it }
-
-            Spacer(modifier = Modifier.height(Dm.marginLarge))
+            // sign up pressed
+            navController.navigate(Screen.SearchFriendListScreen.route)
         }
     }
 }

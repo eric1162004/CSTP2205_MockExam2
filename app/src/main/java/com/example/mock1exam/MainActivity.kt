@@ -21,16 +21,15 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Mock1ExamTheme {
-//                MainScreen()
+                MainScreen()
 
+//                WelcomeScreen()
 //                LoginScreen()
 //                SignUpScreen()
-//                BananaSubmitScreen()
-//                BananaListingScreen()
-//                BananaDetailsScreen()
-//                BananaMapScreen()
-
-                WelcomeScreen()
+//                SearchFriendListScreen()
+//                MoreFriendsScreen()
+//                CatDetailsScreen()
+//                CatUploadScreen()
             }
         }
     }

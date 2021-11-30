@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.scale
 import com.example.assignment4.utils.map.Coordinate
-import com.example.mock1exam.R
 import com.example.mock1exam.utils.permission.Permission
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.gms.location.LocationServices
@@ -29,12 +28,12 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.example.mock1exam.R
 
 // Annotate a list of coordinates
 // Can fly to specific coordinate
 // Fly to user current location if specific location is not provided
 // Trigger callback when an annotation is pressed
-
 @SuppressLint("MissingPermission")
 @ExperimentalPermissionsApi
 @Composable
@@ -194,7 +193,7 @@ private fun MapView.MapBoxLoadStyleSettings(mapBox: MapboxMap?) {
 }
 
 private fun MapView.GetBitmap() = BitmapFactory
-    .decodeResource(resources, R.drawable.banana_location_pin)
+    .decodeResource(resources, R.drawable.cat_pink_paw_icon)
     .scale(150, 150)
 
 private fun MapboxAnimationOptions() = MapAnimationOptions.mapAnimationOptions {

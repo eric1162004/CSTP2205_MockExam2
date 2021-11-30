@@ -8,53 +8,64 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.mock1exam.R
 
-val Outfit = FontFamily(
-    Font(R.font.outfit_regular, FontWeight.Normal),
-    Font(R.font.outfit_semibold, FontWeight.Bold),
-//    Font(R.font.outfit_bold, FontWeight.Bold),
+val itim = FontFamily(
+    Font(R.font.itim_regular, FontWeight.Normal)
+)
+
+val kranky = FontFamily(
+    Font(R.font.kranky_regular, FontWeight.Normal)
 )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    defaultFontFamily = Outfit,
     body1 = TextStyle(
+        fontFamily = itim,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 20.sp
     ),
     body2 = TextStyle(
+        fontFamily = itim,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
     h1 = TextStyle(
-        fontWeight = FontWeight.Bold,
-        fontSize = 30.sp
+        fontFamily = kranky,
+        fontWeight = FontWeight.Normal,
+        fontSize = 40.sp
     ),
     h2 = TextStyle(
-        fontWeight = FontWeight.Bold,
-        fontSize = 26.sp
+        fontFamily = kranky,
+        fontWeight = FontWeight.Normal,
+        fontSize = 30.sp
     ),
     h3 = TextStyle(
-        fontWeight = FontWeight.Bold,
-        fontSize = 23.sp
+        fontFamily = kranky,
+        fontWeight = FontWeight.Normal,
+        fontSize = 25.sp
     ),
     h4 = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontFamily = kranky,
+        fontWeight = FontWeight.Normal,
         fontSize = 20.sp
     ),
     h5 = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontFamily = kranky,
+        fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     h6 = TextStyle(
-        fontWeight = FontWeight.Bold,
+        fontFamily = kranky,
+        fontWeight = FontWeight.Normal,
         fontSize = 13.sp
     ),
     button = TextStyle(
+        fontFamily = itim,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
     ),
     caption = TextStyle(
-        fontWeight = FontWeight.Light,
+        fontFamily = itim,
+        fontWeight = FontWeight.Normal,
         fontSize = 13.sp
     ),
 )
