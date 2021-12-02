@@ -1,29 +1,26 @@
 package com.example.mock1exam.views.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.mock1exam.data.CatAPI.CatService
-import com.example.mock1exam.data.CatAPI.responses.CatResponse
 import com.example.mock1exam.data.FakeCatBreedList
+import com.example.mock1exam.data.entities.Cat
+import com.example.mock1exam.data.repositories.CatRepository
 import com.example.mock1exam.ui.theme.Dm
-import com.example.mock1exam.utils.Resource
+import com.example.mock1exam.data.Resource
 import com.example.mock1exam.views.app_reusables.CatItemCard
 import com.example.mock1exam.views.navigation.Screen
 import com.example.mock1exam.views.reusables.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun SearchFriendListScreen(
@@ -61,6 +58,11 @@ fun SearchFriendListScreen(
                 backgroundColor = Color.White
             )
         },
+        floatingActionButton = {
+            CircularIconButton(imageVector = Icons.Filled.Add) {
+                navController.navigate(Screen.CatUploadScreen.route)
+            }
+        },
         backgroundColor = Color.White
     ) {
         SearchFriendListScreenContent(navController)
@@ -71,29 +73,26 @@ fun SearchFriendListScreen(
 private fun SearchFriendListScreenContent(
     navController: NavController
 ) {
+    val catRepository by remember { mutableStateOf(CatRepository()) }
+    val catsFlowState = catRepository.getAll()
+        .collectAsState(initial = listOf<Cat>()).value
+
+    var cats by remember { mutableStateOf(listOf<Cat>()) }
+    var filteredCats by remember { mutableStateOf(listOf<Cat>()) }
+
     var searchText by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
-    var scope = rememberCoroutineScope()
-
-    var cats by remember { mutableStateOf(listOf<CatResponse>()) }
-    var filteredCats by remember { mutableStateOf(listOf<CatResponse>()) }
-
-    LaunchedEffect(key1 = true) {
-        val catService = CatService()
-
-        scope.launch(Dispatchers.IO) {
-            var resource = catService.getCatsByBreed(
-                breed = "",
-                limit = 5
-            )
-
-            if (resource is Resource.Success<*>) {
-                if (resource.data!!.isNotEmpty()) {
-                    cats = resource.data!!
+    LaunchedEffect(key1 = catsFlowState) {
+        when (catsFlowState) {
+            is Resource.Success<*> -> {
+                catsFlowState.data?.let {
+                    cats = catsFlowState.data as List<Cat>
                     filteredCats = cats
                 }
-            } else {
-                Log.d("debug", resource.message!!)
+            }
+            else -> {
+                errorMessage = "Something is wrong.."
             }
         }
     }
@@ -118,8 +117,8 @@ private fun SearchFriendListScreenContent(
             searchText = it
 
             if (searchText.isNotEmpty()) {
-                filteredCats = cats.filter { catReponse ->
-                    catReponse.name.lowercase()
+                filteredCats = cats.filter { cat ->
+                    cat.name.lowercase()
                         .contains(searchText.lowercase())
                 }
             } else {
@@ -142,7 +141,7 @@ private fun SearchFriendListScreenContent(
             ) { selectedIndex ->
                 // on breed selected
                 filteredCats = cats.filter { catResponse ->
-                    catResponse.name.lowercase()
+                    catResponse.breed.lowercase()
                         .contains(FakeCatBreedList[selectedIndex].lowercase())
                 }
             }
@@ -191,7 +190,6 @@ private fun SearchFriendListScreenContent(
                 navController.navigate(Screen.MoreFriendsScreen.route)
             }
         }
-
     }
 }
 

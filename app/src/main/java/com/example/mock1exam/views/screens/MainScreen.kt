@@ -2,9 +2,13 @@ package com.example.mock1exam.views.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.mock1exam.utils.auth.Auth
 import com.example.mock1exam.views.navigation.Screen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
@@ -13,10 +17,16 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    val auth by remember { mutableStateOf(Auth()) }
+
+    val initialScreen =
+        if (auth.currentUser === null)
+            Screen.WelcomeScreen.route
+        else Screen.SearchFriendListScreen.route
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route
+        startDestination = initialScreen
     ) {
 
         composable(route = Screen.WelcomeScreen.route) {

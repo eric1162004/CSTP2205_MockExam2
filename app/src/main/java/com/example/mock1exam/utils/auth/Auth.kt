@@ -8,7 +8,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class Auth() {
-
     private var _auth: FirebaseAuth = Firebase.auth
     var currentUser: FirebaseUser? = null
 

@@ -1,7 +1,6 @@
 package com.example.mock1exam.data.repositories
 
 import android.util.Log
-import com.example.foodvillage2205.model.entities.Post
 import com.example.mock1exam.data.Resource
 import com.example.mock1exam.data.entities.Cat
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,18 +15,16 @@ class CatRepository {
     private val TAG = "Debug"
 
     @ExperimentalCoroutinesApi
-    fun getCats() = callbackFlow {
+    fun getAll() = callbackFlow {
         val snapshotListener = _collection
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 val response = if (error == null) {
                     val cats = mutableListOf<Cat>()
 
-                    snapshot?.let { snapshotPosts ->
-                        snapshotPosts.documents.mapTo(cats) { cat ->
-                            val snapshotId = cat.id
-
-                            cat.toObject<Cat>()!!.apply { id = snapshotId }
+                    snapshot?.let { snapshot ->
+                        snapshot.documents.mapTo(cats) { cat ->
+                            cat.toObject<Cat>()!!.apply { id = cat.id }
                         }
                     }
 
@@ -37,13 +34,24 @@ class CatRepository {
                     Resource.Error("Failed to load posts", error)
                 }
 
-                this.trySend(response).isSuccess
+                this.trySend(response)
             }
 
         awaitClose { snapshotListener.remove() }
     }
 
-    fun createCat(cat: Cat, onResponse: (Resource<*>) -> Unit) {
+    fun getById(id: String, onResponse: (Resource<*>) -> Unit){
+        _collection.document(id)
+            .get()
+            .addOnSuccessListener { cat ->
+                onResponse(Resource.Success(cat.toObject<Cat>()))
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+    }
+
+    fun create(cat: Cat, onResponse: (Resource<*>) -> Unit) {
         val newDocRef = _collection.document()
 
         newDocRef.set(cat.apply { id = newDocRef.id })
@@ -54,6 +62,32 @@ class CatRepository {
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding post", e)
                 onResponse(Resource.Error("Error adding post", e))
+            }
+    }
+
+    fun update(cat: Cat, onResponse: (Resource<*>) -> Unit) {
+        _collection.document(cat.id)
+            .set(cat)
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully updated!")
+                onResponse(Resource.Success(cat.id))
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error updating post", e)
+                onResponse(Resource.Error("Error updating post", e))
+            }
+    }
+
+    fun delete(cat: Cat, onResponse: (Resource<*>) -> Unit) {
+        _collection.document(cat.id)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                onResponse(Resource.Success(cat.id))
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error deleting document", e)
+                onResponse(Resource.Error("Error deleting post", e))
             }
     }
 

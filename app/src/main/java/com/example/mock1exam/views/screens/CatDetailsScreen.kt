@@ -15,6 +15,8 @@ import com.example.mock1exam.R
 import com.example.mock1exam.data.CatAPI.CatService
 import com.example.mock1exam.data.CatAPI.responses.CatResponse
 import com.example.mock1exam.data.FakeCatItem
+import com.example.mock1exam.data.entities.Cat
+import com.example.mock1exam.data.repositories.CatRepository
 import com.example.mock1exam.ui.theme.Dm
 import com.example.mock1exam.utils.Resource
 import com.example.mock1exam.views.reusables.*
@@ -37,29 +39,12 @@ fun CatDetailsScreen(
 @ExperimentalFoundationApi
 @Composable
 private fun CatDetailsScreenContent(catId: String) {
-    var scope = rememberCoroutineScope()
-    var cat by remember { mutableStateOf<CatResponse?>(null) }
-
-    LaunchedEffect(key1 = true) {
-        val catService = CatService()
-
-        scope.launch(Dispatchers.IO) {
-            var resource = catService.getCatsByBreed(
-                breed = "",
-                limit = 5
-            )
-
-            if (resource is Resource.Success<*>) {
-                if (resource.data!!.isNotEmpty()) {
-                    cat = resource.data!!.filter {
-                        it.id == catId
-                    }[0]
-                }
-            } else {
-                Log.d("debug", resource.message!!)
-            }
+    val catRepository by remember { mutableStateOf(CatRepository()) }
+    var cat = produceState(initialValue = Cat()) {
+        catRepository.getById(catId) {
+            value = it.data as Cat
         }
-    }
+    }.value
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -71,7 +56,7 @@ private fun CatDetailsScreenContent(catId: String) {
             modifier = Modifier.fillMaxWidth()
         ) {
             AppImageWithUrl(
-                url = cat?.image?.url?:"",
+                url = cat.imageUrl ?: "",
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -97,7 +82,7 @@ private fun CatDetailsScreenContent(catId: String) {
                         .padding(Dm.marginMedium)
                 ) {
                     Text(
-                        text = cat?.name?:"",
+                        text = cat?.name ?: "",
                         style = MaterialTheme.typography.body1,
                         fontSize = 40.sp,
                         color = MaterialTheme.colors.primary
@@ -135,7 +120,7 @@ private fun CatDetailsScreenContent(catId: String) {
 
                     // cat description
                     Text(
-                        text = cat?.description?:"",
+                        text = cat?.description ?: "",
                         style = MaterialTheme.typography.body1
                     )
 

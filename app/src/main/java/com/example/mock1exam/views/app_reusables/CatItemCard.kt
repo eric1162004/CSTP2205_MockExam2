@@ -14,13 +14,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mock1exam.data.CatAPI.responses.CatResponse
+import com.example.mock1exam.data.entities.Cat
 import com.example.mock1exam.ui.theme.Dm
 import com.example.mock1exam.views.reusables.AppImageWithUrl
 import com.example.mock1exam.views.reusables.VerticalSpacer
 
 @Composable
 fun CatItemCard(
-    cat: CatResponse,
+    cat: Cat,
     imageWidth: Dp = 200.dp,
     imageRatio: Float = 1f,
     modifier: Modifier = Modifier,
@@ -33,7 +34,7 @@ fun CatItemCard(
     ) {
         // cat image
         AppImageWithUrl(
-            url = cat.image.url,
+            url = cat.imageUrl,
             aspectRatio = imageRatio,
             width = imageWidth,
             modifier = Modifier.clip(shape = MaterialTheme.shapes.large)
@@ -43,7 +44,7 @@ fun CatItemCard(
 
         // cat name
         Text(
-            text = if (cat.alt_names.isNotEmpty()) cat.alt_names else "no name",
+            text = if (cat.name.isNotEmpty()) cat.name else "no name",
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.primary,
             fontSize = 20.sp
@@ -51,21 +52,21 @@ fun CatItemCard(
 
         // cat breed
         Text(
-            text = if (cat.name.isNotEmpty()) cat.name else "no name",
+            text = if (cat.breed.isNotEmpty()) cat.breed else "unknown breed",
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.secondary
         )
 
         // cat age
         Text(
-            text = "${cat.adaptability} years old",
+            text = "${cat.age} years old",
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.secondary
         )
 
         // cat gender
         Text(
-            text = "girl",
+            text = cat.gender,
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.secondary
         )

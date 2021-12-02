@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp
 
 data class Cat(
     var id: String = "",
-    val title: String = "",
+    val name: String = "",
     val breed: String = "",
     val gender: String = "boy",
     val age: Int = 0,

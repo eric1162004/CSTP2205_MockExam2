@@ -1,6 +1,5 @@
 package com.example.mock1exam.views.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -16,15 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.mock1exam.data.CatAPI.CatService
-import com.example.mock1exam.data.CatAPI.responses.CatResponse
-import com.example.mock1exam.data.FakeCatLists
+import com.example.mock1exam.data.entities.Cat
+import com.example.mock1exam.data.repositories.CatRepository
 import com.example.mock1exam.ui.theme.Dm
-import com.example.mock1exam.utils.Resource
 import com.example.mock1exam.views.app_reusables.CatItemCard
 import com.example.mock1exam.views.navigation.Screen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @Composable
@@ -69,25 +64,22 @@ fun MoreFriendsScreen(
 private fun MoreFriendsScreenContent(
     navController: NavController
 ) {
-    var cats by remember { mutableStateOf(listOf<CatResponse>()) }
+    val catRepository by remember { mutableStateOf(CatRepository()) }
+    val catsFlowState = catRepository.getAll()
+        .collectAsState(initial = listOf<Cat>()).value
 
-    var scope = rememberCoroutineScope()
+    var cats by remember { mutableStateOf(listOf<Cat>()) }
+    var errorMessage by remember { mutableStateOf("") }
 
-    LaunchedEffect(key1 = true) {
-        val catService = CatService()
-
-        scope.launch(Dispatchers.IO) {
-            var resource = catService.getCatsByBreed(
-                breed = "",
-                limit = 5
-            )
-
-            if (resource is Resource.Success<*>) {
-                if (resource.data!!.isNotEmpty()) {
-                    cats = resource.data!!
+    LaunchedEffect(key1 = catsFlowState) {
+        when (catsFlowState) {
+            is com.example.mock1exam.data.Resource.Success<*> -> {
+                catsFlowState.data?.let {
+                    cats = catsFlowState.data as List<Cat>
                 }
-            } else {
-                Log.d("debug", resource.message!!)
+            }
+            else -> {
+                errorMessage = "Something is wrong.."
             }
         }
     }

@@ -1,44 +1,29 @@
 package com.example.mock1exam.views.screens
 
-import android.Manifest
-import android.content.Context
-import android.database.Cursor
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toFile
 import androidx.navigation.NavController
 import com.example.foodvillage2205.view.composables.CameraCapture
 import com.example.mock1exam.R
-import com.example.mock1exam.data.CatAPI.CatService
 import com.example.mock1exam.data.Resource
 import com.example.mock1exam.ui.theme.Dm
 import com.example.mock1exam.utils.gallery.GallerySelect
-import com.example.mock1exam.utils.permission.Permission
 import com.example.mock1exam.views.app_reusables.JumboIconButton
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.firebase.firestore.util.FileUtil
-import com.google.rpc.context.AttributeContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okio.source
 import java.io.File
-import android.provider.MediaStore
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.core.net.toUri
 import com.example.foodvillage2205.model.repositories.StorageRepository
 import com.example.mock1exam.data.entities.Cat
 import com.example.mock1exam.data.repositories.CatRepository
@@ -97,10 +82,11 @@ fun CatUploadScreenContent(
     var catRepository by remember { mutableStateOf(CatRepository()) }
     var storageRepository by remember { mutableStateOf(StorageRepository()) }
 
+    var name by remember { mutableStateOf("") }
     var breed by remember { mutableStateOf("") }
-    var fact by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
     var age by remember { mutableStateOf<Int?>(null) }
+    var gender by remember { mutableStateOf("") }
+    var fact by remember { mutableStateOf("") }
 
     var imageFile by remember { mutableStateOf<File?>(null) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -142,6 +128,16 @@ fun CatUploadScreenContent(
                     }
                 }
             }
+
+            VerticalSpacer(Dm.marginMedium)
+
+            // name
+            CustomTextFieldWithImageIcon(
+                padding = Dm.marginTiny,
+                placeHolderText = "name",
+                placerHolderTextColor = MaterialTheme.colors.secondary,
+                value = name
+            ) { name = it }
 
             VerticalSpacer(Dm.marginMedium)
 
@@ -204,17 +200,15 @@ fun CatUploadScreenContent(
                     buttonColor = MaterialTheme.colors.secondary,
                     modifier = Modifier.width(Dm.buttonWidthDefault)
                 ) {
-                    // submit pressed
+                    // On Submit button pressed
                     scope.launch(Dispatchers.IO) {
                         // call network
                         storageRepository.uploadImage(imageUri!!) { url, fileName ->
 
-                            Log.d("debug", url.toString())
-                            Log.d("debug", fileName)
-
-                            catRepository.createCat(
+                            catRepository.create(
                                 Cat(
                                     breed = breed,
+                                    name = name,
                                     description = fact,
                                     gender = gender,
                                     age = age ?: 0,
@@ -223,7 +217,10 @@ fun CatUploadScreenContent(
                                 )
                             ) {
                                 if (it is Resource.Success) {
-                                    Log.d("debug", "upload successfully")
+                                    Log.d("debug", "upload cat successfully")
+
+                                    // return to original screen
+                                    navController.popBackStack()
                                 }
                             }
                         }
