@@ -28,7 +28,6 @@ fun MainScreen() {
         navController = navController,
         startDestination = initialScreen
     ) {
-
         composable(route = Screen.WelcomeScreen.route) {
             WelcomeScreen(navController)
         }
@@ -58,6 +57,5 @@ fun MainScreen() {
         composable(route = Screen.CatUploadScreen.route) {
             CatUploadScreen(navController)
         }
-
     }
 }

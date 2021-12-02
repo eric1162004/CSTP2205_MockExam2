@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.mock1exam.data.FakeCatBreedList
 import com.example.mock1exam.data.entities.Cat
 import com.example.mock1exam.data.repositories.CatRepository
 import com.example.mock1exam.ui.theme.Dm
@@ -26,7 +25,12 @@ import com.example.mock1exam.views.reusables.*
 fun SearchFriendListScreen(
     navController: NavController
 ) {
+    val scaffoldState = rememberScaffoldState(
+        rememberDrawerState(initialValue = DrawerValue.Closed))
+
     Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = { Drawer(navController = navController) },
         topBar = {
             TopAppBar(
                 content = {
@@ -59,7 +63,10 @@ fun SearchFriendListScreen(
             )
         },
         floatingActionButton = {
-            CircularIconButton(imageVector = Icons.Filled.Add) {
+            CircularIconButton(
+                imageVector = Icons.Filled.Add,
+                iconTint = Color.White,
+            ) {
                 navController.navigate(Screen.CatUploadScreen.route)
             }
         },
@@ -88,13 +95,16 @@ private fun SearchFriendListScreenContent(
             is Resource.Success<*> -> {
                 catsFlowState.data?.let {
                     cats = catsFlowState.data as List<Cat>
-                    filteredCats = cats
                 }
             }
             else -> {
                 errorMessage = "Something is wrong.."
             }
         }
+    }
+
+    LaunchedEffect(key1 = cats) {
+        filteredCats = cats
     }
 
     Column(
@@ -104,6 +114,7 @@ private fun SearchFriendListScreenContent(
             .fillMaxSize()
             .padding(horizontal = Dm.marginMedium)
     ) {
+
         // search bar
         CustomTextField(
             imageVector = Icons.Filled.Search,
@@ -137,12 +148,12 @@ private fun SearchFriendListScreenContent(
             AppDropdownMenu(
                 menuLabel = "breed",
                 fontColor = MaterialTheme.colors.secondary,
-                dropDownItems = FakeCatBreedList
+                dropDownItems = CatBreedList
             ) { selectedIndex ->
                 // on breed selected
-                filteredCats = cats.filter { catResponse ->
-                    catResponse.breed.lowercase()
-                        .contains(FakeCatBreedList[selectedIndex].lowercase())
+                filteredCats = cats.filter { cat ->
+                    cat.breed.lowercase()
+                        .contains(CatBreedList[selectedIndex].lowercase())
                 }
             }
 
@@ -151,9 +162,9 @@ private fun SearchFriendListScreenContent(
             AppDropdownMenu(
                 menuLabel = "category",
                 fontColor = MaterialTheme.colors.secondary,
-                dropDownItems = FakeCatBreedList
+                dropDownItems = CatCategoryList
             ) {
-                // on breed selected
+                // on category selected
             }
         }
 
@@ -167,14 +178,16 @@ private fun SearchFriendListScreenContent(
                     modifier = Modifier.padding(horizontal = Dm.marginSmall)
                 ) {
                     // on card pressed
-                    navController.navigate(Screen.CatDetailsScreen.createRoute(filteredCats[index].id))
+                    navController.navigate(
+                        Screen.CatDetailsScreen.createRoute(filteredCats[index].id)
+                    )
                 }
             }
         }
 
         VerticalSpacer(Dm.marginExtraLarge)
 
-        // more button
+        // More Button
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
@@ -186,10 +199,25 @@ private fun SearchFriendListScreenContent(
                 fontColor = Color.White,
                 buttonColor = MaterialTheme.colors.secondary,
             ) {
-                // more pressed
+                // more button pressed
                 navController.navigate(Screen.MoreFriendsScreen.route)
             }
         }
     }
 }
+
+private val CatBreedList = listOf(
+    "Persian",
+    "Maine Coon",
+    "Shorthair",
+    "Siamese",
+)
+private val CatCategoryList = listOf(
+    "A",
+    "B",
+    "C",
+    "D",
+)
+
+
 

@@ -1,19 +1,15 @@
-package com.example.mock1exam.data.CatAPI
+package com.example.mock1exam.data.API
 
 import android.util.Log
 import com.example.assignment4.utils.map.CatApi
-import com.example.mock1exam.data.CatAPI.responses.CatResponse
-import com.example.mock1exam.utils.Resource
-import okhttp3.MediaType
+import com.example.mock1exam.data.API.responses.CatResponse
+import com.example.mock1exam.data.Resource
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.await
-
 
 private val api_endpoint: String = "https://api.thecatapi.com/"
 

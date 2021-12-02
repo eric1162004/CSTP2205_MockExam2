@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.mock1exam.data.Resource
 import com.example.mock1exam.data.entities.Cat
 import com.example.mock1exam.data.repositories.CatRepository
 import com.example.mock1exam.ui.theme.Dm
@@ -73,7 +74,7 @@ private fun MoreFriendsScreenContent(
 
     LaunchedEffect(key1 = catsFlowState) {
         when (catsFlowState) {
-            is com.example.mock1exam.data.Resource.Success<*> -> {
+            is Resource.Success<*> -> {
                 catsFlowState.data?.let {
                     cats = catsFlowState.data as List<Cat>
                 }

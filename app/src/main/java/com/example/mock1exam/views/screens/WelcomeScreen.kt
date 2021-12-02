@@ -35,13 +35,15 @@ fun WelcomeScreen(
 
         VerticalSpacer(Dm.marginLarge)
 
-        // title text
+        // title
         Text(
             text = "HUMH!",
             style = MaterialTheme.typography.body1,
             fontSize = 40.sp,
             color = MaterialTheme.colors.primary
         )
+
+        // sub-title
         Text(
             text = "HUMAN!",
             style = MaterialTheme.typography.h1,
@@ -68,7 +70,7 @@ fun WelcomeScreen(
                 imageResource = R.drawable.cat_paw_icon,
                 backgroundColor = Color.White
             ) {
-                // go to login
+                // go to login screen
                 navController.navigate(Screen.LoginScreen.route)
             }
         }

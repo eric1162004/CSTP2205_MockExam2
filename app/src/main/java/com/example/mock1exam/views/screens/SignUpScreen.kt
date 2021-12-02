@@ -5,8 +5,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -74,7 +72,7 @@ private fun SignUpScreenContent(
 
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = CenterHorizontally,
         modifier = Modifier.padding(horizontal = Dm.marginLarge * 2)
     ) {
         // name
@@ -124,16 +122,10 @@ private fun SignUpScreenContent(
         Spacer(modifier = Modifier.height(Dm.marginLarge))
 
         // Show Error Message
-        if (errorMessage.isNotEmpty()) {
-            Text(
-                text = errorMessage,
-                style = MaterialTheme.typography.body1,
-                color = Color.Red,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(CenterHorizontally)
-            )
-        }
+        ErrorMessage(
+            errorMessage = errorMessage,
+            modifier = Modifier.align(CenterHorizontally)
+        )
 
         // sign up button
         AppButton(
@@ -144,7 +136,9 @@ private fun SignUpScreenContent(
         ) {
             errorMessage = ""
 
-            if (password.contentEquals(confirmPassword)) {
+            if (!password.contentEquals(confirmPassword)) {
+                errorMessage = "Passwords doesn't match."
+            } else {
                 auth.signUpWithEmailAndPassword(
                     email = email,
                     password = password,
@@ -155,9 +149,8 @@ private fun SignUpScreenContent(
                     onSuccess = {
                         // sign up success!
                         navController.navigate(Screen.SearchFriendListScreen.route)
-                    })
-            } else {
-                errorMessage = "Passwords doesn't match."
+                    }
+                )
             }
         }
     }

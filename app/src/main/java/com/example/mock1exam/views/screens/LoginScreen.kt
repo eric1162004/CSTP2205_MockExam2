@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -119,16 +120,10 @@ private fun LoginScreenContent(
         Spacer(modifier = Modifier.height(Dm.marginMedium))
 
         // Show Error Message
-        if (errorMessage.isNotEmpty()) {
-            Text(
-                text = errorMessage,
-                style = MaterialTheme.typography.body1,
-                color = Color.Red,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-            )
-        }
+        ErrorMessage(
+            errorMessage = errorMessage,
+            modifier = Modifier.align(CenterHorizontally)
+        )
 
         // Login Button
         AppButton(

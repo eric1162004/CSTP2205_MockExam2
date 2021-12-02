@@ -4,45 +4,6 @@ import com.example.assignment4.utils.map.Coordinate
 import com.example.mock1exam.data.entities.BananaItem
 import com.example.mock1exam.data.entities.BananaLocation
 
-data class CatItem(
-    var name: String,
-    var imageUrl: String,
-    var breed: String,
-    var age: Int,
-    var gender: String,
-    var fact: String,
-)
-
-val FakeCatItem = CatItem(
-    name = "Bubble",
-    imageUrl = "https://blog.healthypawspetinsurance.com/wp-content/uploads/2018/06/GettyImages-160524191.jpg",
-    breed = "Persian Cat",
-    age = 2,
-    gender = "girl",
-    fact = "The Persian cat is a long-haired breed of cat characterized by its round face and short muzzle. It is also known as the \"Persian Longhair\" in English-speaking countries. The first documented ancestors of Persian cats were imported into Italy from Persia around 1620."
-)
-
-val FakeCatLists = listOf(
-    FakeCatItem,
-    FakeCatItem,
-    FakeCatItem,
-    FakeCatItem,
-)
-
-val FakeCatBreedList = listOf(
-        "Persian",
-        "Maine Coon",
-        "Shorthair",
-        "Siamese",
-)
-
-val FakeCatCategoryList = listOf(
-    "A",
-    "B",
-    "C",
-    "D",
-)
-
 val FakeBananaLocation = BananaLocation(
     address = "300 Memorial Blvd, \nWinnipeg, MB R3C 1V1",
     placeName = "Market A",

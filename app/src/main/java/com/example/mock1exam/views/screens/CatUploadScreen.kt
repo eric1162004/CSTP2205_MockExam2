@@ -78,9 +78,9 @@ fun CatUploadScreenContent(
     var showCamera by remember { mutableStateOf(false) }
     var showGallery by remember { mutableStateOf(false) }
 
-    var scope = rememberCoroutineScope()
-    var catRepository by remember { mutableStateOf(CatRepository()) }
-    var storageRepository by remember { mutableStateOf(StorageRepository()) }
+    val scope = rememberCoroutineScope()
+    val catRepository by remember { mutableStateOf(CatRepository()) }
+    val storageRepository by remember { mutableStateOf(StorageRepository()) }
 
     var name by remember { mutableStateOf("") }
     var breed by remember { mutableStateOf("") }
@@ -202,9 +202,10 @@ fun CatUploadScreenContent(
                 ) {
                     // On Submit button pressed
                     scope.launch(Dispatchers.IO) {
-                        // call network
+                        // upload image
                         storageRepository.uploadImage(imageUri!!) { url, fileName ->
 
+                            // save cat
                             catRepository.create(
                                 Cat(
                                     breed = breed,
