@@ -22,14 +22,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             Mock1ExamTheme {
                 MainScreen()
-
-//                WelcomeScreen()
-//                LoginScreen()
-//                SignUpScreen()
-//                SearchFriendListScreen()
-//                MoreFriendsScreen()
-//                CatDetailsScreen()
-//                CatUploadScreen()
             }
         }
     }
