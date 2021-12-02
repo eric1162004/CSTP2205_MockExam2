@@ -1,9 +1,10 @@
 package com.example.mock1exam.views.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -11,25 +12,55 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mock1exam.R
+import com.example.mock1exam.data.CatAPI.CatService
+import com.example.mock1exam.data.CatAPI.responses.CatResponse
 import com.example.mock1exam.data.FakeCatItem
 import com.example.mock1exam.ui.theme.Dm
+import com.example.mock1exam.utils.Resource
 import com.example.mock1exam.views.reusables.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @Composable
 fun CatDetailsScreen(
-    navController: NavController
+    navController: NavController,
+    catId: String
 ) {
     Scaffold(
         backgroundColor = Color.White
     ) {
-        CatDetailsScreenContent()
+        CatDetailsScreenContent(catId)
     }
 }
 
 @ExperimentalFoundationApi
 @Composable
-private fun CatDetailsScreenContent() {
+private fun CatDetailsScreenContent(catId: String) {
+    var scope = rememberCoroutineScope()
+    var cat by remember { mutableStateOf<CatResponse?>(null) }
+
+    LaunchedEffect(key1 = true) {
+        val catService = CatService()
+
+        scope.launch(Dispatchers.IO) {
+            var resource = catService.getCatsByBreed(
+                breed = "",
+                limit = 5
+            )
+
+            if (resource is Resource.Success<*>) {
+                if (resource.data!!.isNotEmpty()) {
+                    cat = resource.data!!.filter {
+                        it.id == catId
+                    }[0]
+                }
+            } else {
+                Log.d("debug", resource.message!!)
+            }
+        }
+    }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -40,8 +71,7 @@ private fun CatDetailsScreenContent() {
             modifier = Modifier.fillMaxWidth()
         ) {
             AppImageWithUrl(
-                url = "https://hips.hearstapps.com/hmg-prod.s3.amazonaws" +
-                        ".com/images/cute-cat-photos-1593441022.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=640:*",
+                url = cat?.image?.url?:"",
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -67,7 +97,7 @@ private fun CatDetailsScreenContent() {
                         .padding(Dm.marginMedium)
                 ) {
                     Text(
-                        text = "Persian Cat",
+                        text = cat?.name?:"",
                         style = MaterialTheme.typography.body1,
                         fontSize = 40.sp,
                         color = MaterialTheme.colors.primary
@@ -78,7 +108,7 @@ private fun CatDetailsScreenContent() {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth(),
-                    ){
+                    ) {
                         CircularImageButton(
                             imageResource = R.drawable.cat_face_icon,
                             backgroundColor = Color.White
@@ -105,7 +135,7 @@ private fun CatDetailsScreenContent() {
 
                     // cat description
                     Text(
-                        text = FakeCatItem.fact,
+                        text = cat?.description?:"",
                         style = MaterialTheme.typography.body1
                     )
 

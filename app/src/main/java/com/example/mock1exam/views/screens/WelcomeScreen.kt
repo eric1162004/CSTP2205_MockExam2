@@ -33,7 +33,7 @@ fun WelcomeScreen(
             aspectRatio = 1f
         )
 
-        VerticalSpacer()
+        VerticalSpacer(Dm.marginLarge)
 
         // title text
         Text(
@@ -42,20 +42,21 @@ fun WelcomeScreen(
             fontSize = 40.sp,
             color = MaterialTheme.colors.primary
         )
-
         Text(
             text = "HUMAN!",
             style = MaterialTheme.typography.h1,
             color = MaterialTheme.colors.secondary
         )
 
-        VerticalSpacer()
+        VerticalSpacer(Dm.marginLarge)
 
         // sub-text
         Text(
             text = "you've decided to have a cat?\n let us kelp you!",
             style = MaterialTheme.typography.body1,
         )
+
+        VerticalSpacer(Dm.marginLarge)
 
         // meow icon
         Row(

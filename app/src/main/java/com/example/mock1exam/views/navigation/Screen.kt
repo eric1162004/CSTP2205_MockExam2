@@ -7,6 +7,8 @@ sealed class Screen(val route: String){
 
     object SearchFriendListScreen : Screen("SearchFriendListScreen")
     object MoreFriendsScreen : Screen("MoreFriendsScreen")
-    object CatDetailsScreen : Screen("CatDetailsScreen")
+    object CatDetailsScreen : Screen("CatDetailsScreen/{id}"){
+        fun createRoute(id: String) = "CatDetailsScreen/$id"
+    }
     object CatUploadScreen : Screen("CatUploadScreen")
 }

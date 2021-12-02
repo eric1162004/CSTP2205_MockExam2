@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -55,7 +56,7 @@ fun SearchFriendListScreen(
                         )
                     }
                 },
-                contentPadding = PaddingValues(vertical = Dm.marginMedium),
+                contentPadding = PaddingValues(vertical = Dm.marginLarge),
                 elevation = 0.dp,
                 backgroundColor = Color.White
             )
@@ -71,8 +72,11 @@ private fun SearchFriendListScreenContent(
     navController: NavController
 ) {
     var searchText by remember { mutableStateOf("") }
-    var cats by remember { mutableStateOf(listOf<CatResponse>()) }
+
     var scope = rememberCoroutineScope()
+
+    var cats by remember { mutableStateOf(listOf<CatResponse>()) }
+    var filteredCats by remember { mutableStateOf(listOf<CatResponse>()) }
 
     LaunchedEffect(key1 = true) {
         val catService = CatService()
@@ -86,6 +90,7 @@ private fun SearchFriendListScreenContent(
             if (resource is Resource.Success<*>) {
                 if (resource.data!!.isNotEmpty()) {
                     cats = resource.data!!
+                    filteredCats = cats
                 }
             } else {
                 Log.d("debug", resource.message!!)
@@ -109,7 +114,18 @@ private fun SearchFriendListScreenContent(
             placeHolderText = "search",
             placerHolderTextColor = MaterialTheme.colors.secondary,
             value = searchText
-        ) { searchText = it }
+        ) {
+            searchText = it
+
+            if (searchText.isNotEmpty()) {
+                filteredCats = cats.filter { catReponse ->
+                    catReponse.name.lowercase()
+                        .contains(searchText.lowercase())
+                }
+            } else {
+                filteredCats = cats
+            }
+        }
 
         VerticalSpacer(Dm.marginMedium)
 
@@ -119,13 +135,25 @@ private fun SearchFriendListScreenContent(
             horizontalArrangement = Arrangement.Start,
             modifier = Modifier.fillMaxWidth()
         ) {
-            AppDropdownMenu(menuLabel = "breed", dropDownItems = FakeCatBreedList) {
+            AppDropdownMenu(
+                menuLabel = "breed",
+                fontColor = MaterialTheme.colors.secondary,
+                dropDownItems = FakeCatBreedList
+            ) { selectedIndex ->
                 // on breed selected
+                filteredCats = cats.filter { catResponse ->
+                    catResponse.name.lowercase()
+                        .contains(FakeCatBreedList[selectedIndex].lowercase())
+                }
             }
 
             HorizontalSpacer(Dm.marginSmall)
 
-            AppDropdownMenu(menuLabel = "category", dropDownItems = FakeCatBreedList) {
+            AppDropdownMenu(
+                menuLabel = "category",
+                fontColor = MaterialTheme.colors.secondary,
+                dropDownItems = FakeCatBreedList
+            ) {
                 // on breed selected
             }
         }
@@ -134,15 +162,18 @@ private fun SearchFriendListScreenContent(
 
         // lazy row
         LazyRow {
-            items(cats.size) { index ->
+            items(filteredCats.size) { index ->
                 CatItemCard(
-                    cat = cats[index],
+                    cat = filteredCats[index],
                     modifier = Modifier.padding(horizontal = Dm.marginSmall)
-                )
+                ) {
+                    // on card pressed
+                    navController.navigate(Screen.CatDetailsScreen.createRoute(filteredCats[index].id))
+                }
             }
         }
 
-        VerticalSpacer(Dm.marginMedium)
+        VerticalSpacer(Dm.marginExtraLarge)
 
         // more button
         Row(

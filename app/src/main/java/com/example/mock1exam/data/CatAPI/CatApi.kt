@@ -1,10 +1,15 @@
 package com.example.assignment4.utils.map
 
+import com.example.mock1exam.data.CatAPI.responses.CatDeleteResponse
 import com.example.mock1exam.data.CatAPI.responses.CatResponse
+import com.example.mock1exam.data.CatAPI.responses.CatUploadResponse
 import com.example.mymaptesting.responses.LocationResult
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import com.squareup.okhttp.RequestBody
+import okhttp3.MultipartBody
+import retrofit2.Call
+import retrofit2.http.*
+import java.io.File
+
 
 interface CatApi {
     @GET("v1/breeds?")
@@ -12,4 +17,26 @@ interface CatApi {
         @Query("attach_breed") attach_breed: String,
         @Query("limit") limit: Int
     ): List<CatResponse>
+
+    @Headers(
+//        "content-type: multipart/form-data",
+//        "Host: api.thecatapi.com",
+//        "user-agent: insomnia/2021.6.0",
+//        "accept: */*",
+        "x-api-key: 03c41caa-2307-49ae-86ec-c1a57d5ccdeb"
+    )
+    @Multipart
+    @POST("v1/images/upload")
+    fun updateCat(
+        @Part file: MultipartBody.Part
+//        @Part("sub_id") sub_id: String?,
+//        @Part("breed_ids") breed_ids: String?
+    ): Call<CatUploadResponse>
+
+    @Headers("x-api-key: 03c41caa-2307-49ae-86ec-c1a57d5ccdeb")
+    @DELETE("v1/images/{id}")
+    fun deleteCatById(
+        @Path("id") id: String
+    ): Call<CatDeleteResponse>
+
 }

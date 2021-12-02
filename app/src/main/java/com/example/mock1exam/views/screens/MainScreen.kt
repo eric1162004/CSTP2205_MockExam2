@@ -16,7 +16,7 @@ fun MainScreen() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.SearchFriendListScreen.route
+        startDestination = Screen.LoginScreen.route
     ) {
 
         composable(route = Screen.WelcomeScreen.route) {
@@ -40,7 +40,9 @@ fun MainScreen() {
         }
 
         composable(route = Screen.CatDetailsScreen.route) {
-            CatDetailsScreen(navController)
+            val id = it.arguments?.getString("id")
+
+            CatDetailsScreen(navController, id!!)
         }
 
         composable(route = Screen.CatUploadScreen.route) {

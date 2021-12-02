@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mock1exam.R
 import com.example.mock1exam.ui.theme.Dm
+import com.example.mock1exam.utils.auth.Auth
 import com.example.mock1exam.views.navigation.Screen
 import com.example.mock1exam.views.reusables.*
 
@@ -61,10 +63,14 @@ fun SignUpScreen(
 private fun SignUpScreenContent(
     navController: NavController
 ) {
+    val auth by remember { mutableStateOf(Auth()) }
+
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    var errorMessage by remember { mutableStateOf("") }
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -117,6 +123,18 @@ private fun SignUpScreenContent(
 
         Spacer(modifier = Modifier.height(Dm.marginLarge))
 
+        // Show Error Message
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                style = MaterialTheme.typography.body1,
+                color = Color.Red,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(CenterHorizontally)
+            )
+        }
+
         // sign up button
         AppButton(
             label = "sign up",
@@ -124,8 +142,23 @@ private fun SignUpScreenContent(
             buttonColor = MaterialTheme.colors.secondary,
             modifier = Modifier.width(Dm.buttonWidthDefault)
         ) {
-            // sign up pressed
-            navController.navigate(Screen.SearchFriendListScreen.route)
+            errorMessage = ""
+
+            if (password.contentEquals(confirmPassword)) {
+                auth.signUpWithEmailAndPassword(
+                    email = email,
+                    password = password,
+                    onError = { message ->
+                        // sign up failed!
+                        errorMessage = message ?: "Sign Up failed. Please try again"
+                    },
+                    onSuccess = {
+                        // sign up success!
+                        navController.navigate(Screen.SearchFriendListScreen.route)
+                    })
+            } else {
+                errorMessage = "Passwords doesn't match."
+            }
         }
     }
 }

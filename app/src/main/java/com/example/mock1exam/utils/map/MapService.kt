@@ -1,9 +1,8 @@
 package com.example.assignment4.utils.map
 
 import android.util.Log
-import com.example.mymaptesting.responses.LocationResult
 import com.example.mymaptesting.responses.MapResponse
-import com.example.testing.map.Resource
+import com.example.mock1exam.data.Resource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

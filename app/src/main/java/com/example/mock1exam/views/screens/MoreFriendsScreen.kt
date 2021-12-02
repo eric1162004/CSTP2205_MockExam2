@@ -22,6 +22,7 @@ import com.example.mock1exam.data.FakeCatLists
 import com.example.mock1exam.ui.theme.Dm
 import com.example.mock1exam.utils.Resource
 import com.example.mock1exam.views.app_reusables.CatItemCard
+import com.example.mock1exam.views.navigation.Screen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -52,21 +53,24 @@ fun MoreFriendsScreen(
                         )
                     }
                 },
-                contentPadding = PaddingValues(vertical = Dm.marginMedium),
+                contentPadding = PaddingValues(vertical = Dm.marginLarge),
                 elevation = 0.dp,
                 backgroundColor = Color.White
             )
         },
         backgroundColor = Color.White
     ) {
-        MoreFriendsScreenContent()
+        MoreFriendsScreenContent(navController)
     }
 }
 
 @ExperimentalFoundationApi
 @Composable
-private fun MoreFriendsScreenContent() {
+private fun MoreFriendsScreenContent(
+    navController: NavController
+) {
     var cats by remember { mutableStateOf(listOf<CatResponse>()) }
+
     var scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
@@ -95,7 +99,10 @@ private fun MoreFriendsScreenContent() {
             CatItemCard(
                 cat = cats[index],
                 modifier = Modifier.padding(horizontal = Dm.marginSmall)
-            )
+            ){
+                // on card pressed
+                navController.navigate(Screen.CatDetailsScreen.createRoute(cats[index].id))
+            }
         }
     }
 }

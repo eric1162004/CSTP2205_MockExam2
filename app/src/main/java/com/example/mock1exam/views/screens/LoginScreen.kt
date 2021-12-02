@@ -1,12 +1,7 @@
 package com.example.mock1exam.views.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mock1exam.R
 import com.example.mock1exam.ui.theme.Dm
+import com.example.mock1exam.utils.auth.Auth
 import com.example.mock1exam.views.navigation.Screen
 import com.example.mock1exam.views.reusables.*
 
@@ -61,9 +57,13 @@ fun LoginScreen(
 private fun LoginScreenContent(
     navController: NavController
 ) {
-    var name by remember { mutableStateOf("") }
+    val auth by remember { mutableStateOf(Auth()) }
+
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isRememberMeChecked by remember { mutableStateOf(false) }
+
+    var errorMessage by remember { mutableStateOf("") }
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -74,10 +74,10 @@ private fun LoginScreenContent(
         CustomTextFieldWithImageIcon(
             imageResourceId = R.drawable.cat_pink_paw_icon,
             padding = Dm.marginTiny,
-            placeHolderText = "name",
+            placeHolderText = "email",
             placerHolderTextColor = MaterialTheme.colors.secondary,
-            value = name
-        ) { name = it }
+            value = email
+        ) { email = it }
 
         Spacer(modifier = Modifier.height(Dm.marginLarge))
 
@@ -118,13 +118,36 @@ private fun LoginScreenContent(
         Spacer(modifier = Modifier.height(Dm.marginLarge))
         Spacer(modifier = Modifier.height(Dm.marginMedium))
 
+        // Show Error Message
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                style = MaterialTheme.typography.body1,
+                color = Color.Red,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
+
+        // Login Button
         AppButton(
             label = "log in",
             fontColor = Color.White,
             buttonColor = MaterialTheme.colors.secondary,
         ) {
-            // log in pressed
-            navController.navigate(Screen.SearchFriendListScreen.route)
+            errorMessage = ""
+
+            auth.signInWithEmailAndPassword(
+                email = email,
+                password = password,
+                onError = { message ->
+                    errorMessage = message ?: "Sign In failed. Please try again"
+                },
+                onSuccess = {
+                    navController.navigate(Screen.SearchFriendListScreen.route)
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(Dm.marginMedium))
@@ -179,7 +202,7 @@ private fun LoginScreenContent(
 
         Spacer(modifier = Modifier.height(Dm.marginMedium * 4))
 
-        // Dont have an account
+        // Don't have an account
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,

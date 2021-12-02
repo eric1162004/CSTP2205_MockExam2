@@ -1,5 +1,6 @@
 package com.example.mock1exam.views.app_reusables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
@@ -22,12 +23,13 @@ fun CatItemCard(
     cat: CatResponse,
     imageWidth: Dp = 200.dp,
     imageRatio: Float = 1f,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.clickable { onClick() }
     ) {
         // cat image
         AppImageWithUrl(
