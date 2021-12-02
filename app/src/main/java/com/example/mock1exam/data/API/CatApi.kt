@@ -1,15 +1,11 @@
 package com.example.assignment4.utils.map
 
-import com.example.mock1exam.data.CatAPI.responses.CatDeleteResponse
-import com.example.mock1exam.data.CatAPI.responses.CatResponse
-import com.example.mock1exam.data.CatAPI.responses.CatUploadResponse
-import com.example.mymaptesting.responses.LocationResult
-import com.squareup.okhttp.RequestBody
+import com.example.mock1exam.data.API.responses.CatDeleteResponse
+import com.example.mock1exam.data.API.responses.CatResponse
+import com.example.mock1exam.data.API.responses.CatUploadResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
-
 
 interface CatApi {
     @GET("v1/breeds?")
@@ -18,13 +14,7 @@ interface CatApi {
         @Query("limit") limit: Int
     ): List<CatResponse>
 
-    @Headers(
-//        "content-type: multipart/form-data",
-//        "Host: api.thecatapi.com",
-//        "user-agent: insomnia/2021.6.0",
-//        "accept: */*",
-        "x-api-key: 03c41caa-2307-49ae-86ec-c1a57d5ccdeb"
-    )
+    @Headers("x-api-key: 03c41caa-2307-49ae-86ec-c1a57d5ccdeb")
     @Multipart
     @POST("v1/images/upload")
     fun updateCat(

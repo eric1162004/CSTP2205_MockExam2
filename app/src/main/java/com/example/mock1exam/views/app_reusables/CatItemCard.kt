@@ -3,7 +3,6 @@ package com.example.mock1exam.views.app_reusables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mock1exam.data.CatAPI.responses.CatResponse
 import com.example.mock1exam.data.entities.Cat
 import com.example.mock1exam.ui.theme.Dm
 import com.example.mock1exam.views.reusables.AppImageWithUrl

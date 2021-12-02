@@ -1,4 +1,4 @@
-package com.example.mock1exam.data.CatAPI.responses
+package com.example.mock1exam.data.API.responses
 
 data class CatUploadResponse(
     val approved: Int,

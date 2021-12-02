@@ -1,6 +1,5 @@
 package com.example.mock1exam.views.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -12,16 +11,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mock1exam.R
-import com.example.mock1exam.data.CatAPI.CatService
-import com.example.mock1exam.data.CatAPI.responses.CatResponse
-import com.example.mock1exam.data.FakeCatItem
 import com.example.mock1exam.data.entities.Cat
 import com.example.mock1exam.data.repositories.CatRepository
 import com.example.mock1exam.ui.theme.Dm
-import com.example.mock1exam.utils.Resource
 import com.example.mock1exam.views.reusables.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @Composable
@@ -84,8 +77,8 @@ private fun CatDetailsScreenContent(catId: String) {
                     Text(
                         text = cat?.name ?: "",
                         style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.primary,
                         fontSize = 40.sp,
-                        color = MaterialTheme.colors.primary
                     )
 
                     // row of icons

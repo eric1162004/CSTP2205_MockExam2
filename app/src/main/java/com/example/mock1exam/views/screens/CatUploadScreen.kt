@@ -202,9 +202,10 @@ fun CatUploadScreenContent(
                 ) {
                     // On Submit button pressed
                     scope.launch(Dispatchers.IO) {
-                        // call network
+                        // upload image
                         storageRepository.uploadImage(imageUri!!) { url, fileName ->
 
+                            // save cat
                             catRepository.create(
                                 Cat(
                                     breed = breed,
